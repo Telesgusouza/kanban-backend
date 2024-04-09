@@ -37,21 +37,14 @@ public class AuthenticationController {
 	@Autowired
 	private UserService repo;
 
-	@Operation(summary = "Fazer login", 
-			description = "Resurso para fazer login na sua conta",
-			responses = {
-					@ApiResponse(
-							responseCode = "201",
-							description = "logado com sucesso",
-							content = @Content(mediaType = "application/json", 
-								schema = @Schema(implementation = ResponseToken.class))
-							
-							)
-			})
+	@Operation(summary = "Fazer login", description = "Resurso para fazer login na sua conta", responses = {
+			@ApiResponse(responseCode = "201", description = "logado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseToken.class))
+
+			) })
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
 
-		var usernamePasword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+		var usernamePasword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getPassword());
 
 		var auth = this.authenticationManager.authenticate(usernamePasword);
 

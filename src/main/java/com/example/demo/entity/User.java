@@ -20,8 +20,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 
 @Table(name = "tb_users")
 @Entity
@@ -35,7 +33,6 @@ public class User implements UserDetails, Serializable {
 	@Column(nullable = false, unique = true)
 	private String username;
 	@Column(nullable = false)
-	@Size(min = 6, max = 32)
 	private String password;
 
 	@Enumerated(EnumType.STRING)
