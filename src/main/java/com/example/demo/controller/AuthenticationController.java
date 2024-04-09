@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.config.jwt.TokenService;
+import com.example.demo.controller.exceptions.StandardError;
 import com.example.demo.dto.AuthenticationDTO;
 import com.example.demo.dto.RegisterDTO;
 import com.example.demo.dto.ResponseToken;
@@ -37,10 +38,20 @@ public class AuthenticationController {
 	@Autowired
 	private UserService repo;
 
-	@Operation(summary = "Fazer login", description = "Resurso para fazer login na sua conta", responses = {
+	@Operation(summary = "Login", description = "Resurso para fazer login na sua conta", responses = {
 			@ApiResponse(responseCode = "201", description = "logado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseToken.class))
 
-			) })
+			),
+
+			@ApiResponse(responseCode = "400", description = "Email não existe", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))
+
+			),
+
+			@ApiResponse(responseCode = "422", description = "Campo(s) invalidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))
+
+			)
+
+	})
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
 
@@ -53,6 +64,20 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new ResponseToken(token));
 	}
 
+	@Operation(summary = "Cadastro", description = "Resurso para criar sua conta", responses = {
+			@ApiResponse(responseCode = "201", description = "Conta criada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseToken.class))
+
+			),
+
+			@ApiResponse(responseCode = "409", description = "Email em uso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))
+
+			),
+
+			@ApiResponse(responseCode = "422", description = "Campo(s) invalidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))
+
+			)
+
+	})
 	@PostMapping("/register")
 	public ResponseEntity<ResponseToken> register(@RequestBody @Valid RegisterDTO data) {
 

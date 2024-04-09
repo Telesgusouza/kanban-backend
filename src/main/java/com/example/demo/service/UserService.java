@@ -13,6 +13,7 @@ import com.example.demo.dto.RegisterDTO;
 import com.example.demo.dto.Mappers.RegisterMapper;
 import com.example.demo.entity.User;
 import com.example.demo.exceptions.ExistUserException;
+import com.example.demo.exceptions.UserDoesNotExistException;
 import com.example.demo.repositories.UserRepository;
 
 @Service
@@ -23,6 +24,11 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+		if (this.repo.findByUsername(username) == null) {
+			throw new UserDoesNotExistException("Email does not exist");
+		}
+
 		return repo.findByUsername(username);
 	}
 
