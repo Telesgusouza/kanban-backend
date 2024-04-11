@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +17,10 @@ import com.example.demo.config.jwt.TokenService;
 import com.example.demo.controller.exceptions.StandardError;
 import com.example.demo.dto.AuthenticationDTO;
 import com.example.demo.dto.RegisterDTO;
+import com.example.demo.dto.ResetPasswordDTO;
 import com.example.demo.dto.ResponseToken;
+import com.example.demo.dto.ResponseUserDTO;
+import com.example.demo.dto.Mappers.ResponseUserMapper;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 
@@ -85,6 +92,55 @@ public class AuthenticationController {
 		var token = tokenService.generateToken(user);
 
 		return ResponseEntity.ok().body(new ResponseToken(token));
+	}
+
+	@Operation(summary = "Redefinir senha", description = "Redefina sua senha", responses = {
+			@ApiResponse(responseCode = "204", description = "Modificado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
+
+			),
+
+			@ApiResponse(responseCode = "422", description = "Campo invalido", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))
+
+			)
+
+	})
+	@PatchMapping("/resetPasswords")
+	public ResponseEntity<Void> redefinePassword(@AuthenticationPrincipal User user,
+			@RequestBody ResetPasswordDTO newPassword) {
+
+		User newUser = repo.redefinePassword(user, newPassword);
+		return ResponseEntity.status(204).build();
+	}
+
+	@Operation(summary = "Deletar", description = "Resurso para deletar a conta", responses = {
+			@ApiResponse(responseCode = "204", description = "Usuario deletado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
+
+			),
+
+			@ApiResponse(responseCode = "422", description = "Erro no login", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))
+
+			),
+
+	})
+	@DeleteMapping("/deleteMyAccount")
+	public ResponseEntity<Void> deleteMyAccount(@AuthenticationPrincipal User user) {
+
+		System.out.println("=========================");
+		System.out.println("OPa opa");
+
+		repo.deleteAccount(user);
+		return ResponseEntity.status(204).build();
+	}
+
+	@Operation(summary = "Recuperar dados", description = "Recupere seus dados", responses = {
+			@ApiResponse(responseCode = "201", description = "Seus dados recuperados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseUserDTO.class))
+
+			),
+
+	})
+	@GetMapping("/recoverData")
+	public ResponseEntity<ResponseUserDTO> recoverData(@AuthenticationPrincipal User user) {
+		return ResponseEntity.status(201).body(new ResponseUserMapper().toDto(user));
 	}
 
 }

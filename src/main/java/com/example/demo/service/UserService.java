@@ -1,18 +1,19 @@
 package com.example.demo.service;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.RegisterDTO;
+import com.example.demo.dto.ResetPasswordDTO;
 import com.example.demo.dto.Mappers.RegisterMapper;
 import com.example.demo.entity.User;
 import com.example.demo.exceptions.ExistUserException;
+import com.example.demo.exceptions.InvalidFieldException;
 import com.example.demo.exceptions.UserDoesNotExistException;
 import com.example.demo.repositories.UserRepository;
 
@@ -32,6 +33,7 @@ public class UserService implements UserDetailsService {
 		return repo.findByUsername(username);
 	}
 
+	@Transactional()
 	public User create(RegisterDTO user) {
 		if (this.repo.findByUsername(user.getLogin()) != null) {
 			throw new ExistUserException("user already exist");
@@ -47,16 +49,27 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public User resetPassword(User user, String newPassword) {
-		user.setPassword(newPassword);
+	public User redefinePassword(User user, ResetPasswordDTO newPassword) {
+		if (newPassword.getNewPassword().length() < 6 || newPassword.getNewPassword().length() > 32) {
+			throw new InvalidFieldException("Field value exceeds size");
+		}
+		;
+
+		String password = new BCryptPasswordEncoder().encode(newPassword.getNewPassword());
+		user.setPassword(password);
 		return repo.save(user);
 	}
 
-	public void deleteAccount(UUID id) {
+	public void deleteAccount(User user) {
+
+		if (user == null) {
+			System.out.println("=============================");
+			System.out.println("Erro chegou aqui");
+		}
+
 		try {
 
-			User user = repo.findById(id).orElseThrow(() -> new ExistUserException("user already exist"));
-			repo.delete(user);
+			repo.deleteById(user.getId());
 		} catch (RuntimeException e) {
 			throw new ExistUserException("user already exist");
 		}
