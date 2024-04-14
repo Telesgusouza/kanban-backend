@@ -18,8 +18,10 @@ import com.example.demo.controller.exceptions.StandardError;
 import com.example.demo.dto.AuthenticationDTO;
 import com.example.demo.dto.RegisterDTO;
 import com.example.demo.dto.ResetPasswordDTO;
+import com.example.demo.dto.ResponseBoardDTO;
 import com.example.demo.dto.ResponseToken;
 import com.example.demo.dto.ResponseUserDTO;
+import com.example.demo.dto.Mappers.ResponseBoardMapper;
 import com.example.demo.dto.Mappers.ResponseUserMapper;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
@@ -124,9 +126,6 @@ public class AuthenticationController {
 	})
 	@DeleteMapping("/deleteMyAccount")
 	public ResponseEntity<Void> deleteMyAccount(@AuthenticationPrincipal User user) {
-
-		System.out.println("=========================");
-		System.out.println("OPa opa");
 
 		repo.deleteAccount(user);
 		return ResponseEntity.status(204).build();

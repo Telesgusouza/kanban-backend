@@ -2,6 +2,7 @@ package com.example.demo.controller.exceptions;
 
 import java.time.Instant;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,7 +29,18 @@ public class ResourceExceptionHandler {
 
 	@ExceptionHandler(InvalidFieldException.class)
 	public ResponseEntity<StandardError> invalidFieldException(InvalidFieldException e, HttpServletRequest request) {
-		String error = "Resource not found";
+		String error = "Invalid fields";
+		Integer statusCode = 422;
+		StandardError err = new StandardError(Instant.now(), statusCode, error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(statusCode).body(err);
+	}
+
+	// PSQLException
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<StandardError> sqlExceptionHelper(DataIntegrityViolationException e,
+			HttpServletRequest request) {
+		String error = "Invalid fields";
 		Integer statusCode = 422;
 		StandardError err = new StandardError(Instant.now(), statusCode, error, e.getMessage(),
 				request.getRequestURI());

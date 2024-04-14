@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dto.RegisterDTO;
 import com.example.demo.dto.ResetPasswordDTO;
 import com.example.demo.dto.Mappers.RegisterMapper;
+import com.example.demo.entity.Board;
 import com.example.demo.entity.User;
 import com.example.demo.exceptions.ExistUserException;
 import com.example.demo.exceptions.InvalidFieldException;
@@ -22,6 +25,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository repo;
+
+	@Autowired
+	private BoardService repoBoard;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,9 +50,22 @@ public class UserService implements UserDetailsService {
 
 			newUser.setPassword(encryptedPassword);
 
-			return repo.save(newUser);
+			User createUser = repo.save(newUser);
+
+			createInitialBoards(createUser);
+
+			return createUser;
 
 		}
+	}
+
+	private void createInitialBoards(User user) {
+
+		Board newBoard1 = new Board(null, "Principal", user);
+		Board newBoard2 = new Board(null, "Plano de Marketing", user);
+
+		repoBoard.newBoard(newBoard1);
+		repoBoard.newBoard(newBoard2);
 	}
 
 	public User redefinePassword(User user, ResetPasswordDTO newPassword) {
@@ -62,11 +81,6 @@ public class UserService implements UserDetailsService {
 
 	public void deleteAccount(User user) {
 
-		if (user == null) {
-			System.out.println("=============================");
-			System.out.println("Erro chegou aqui");
-		}
-
 		try {
 
 			repo.deleteById(user.getId());
@@ -74,6 +88,11 @@ public class UserService implements UserDetailsService {
 			throw new ExistUserException("user already exist");
 		}
 
+	}
+
+	public User recoverBoard(User user) {
+		Optional<User> obj = repo.findById(user.getId());
+		return obj.orElseThrow();
 	}
 
 }

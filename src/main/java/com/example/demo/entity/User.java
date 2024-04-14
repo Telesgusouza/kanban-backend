@@ -2,8 +2,10 @@ package com.example.demo.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +21,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Table(name = "tb_users")
@@ -38,15 +41,19 @@ public class User implements UserDetails, Serializable {
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
+	@OneToMany(mappedBy = "user")
+	private Set<Board> board = new HashSet<>();
+
 	public User() {
 	}
 
-	public User(UUID id, String username, String password, UserRole role) {
+	public User(UUID id, String username, String password, UserRole role, Set<Board> board) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
+		this.board = board;
 	}
 
 	@Override
@@ -88,6 +95,14 @@ public class User implements UserDetails, Serializable {
 		return true;
 	}
 
+	public Set<Board> getBoard() {
+		return board;
+	}
+
+	public void setBoard(Set<Board> board) {
+		this.board = board;
+	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -127,6 +142,12 @@ public class User implements UserDetails, Serializable {
 			return false;
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", board="
+				+ board + "]";
 	}
 
 }

@@ -7,7 +7,7 @@ import com.example.demo.entity.enums.UserRole;
 public class RegisterMapper {
 
 	public static User toUser(RegisterDTO dto) {
-		User user = new User(null, dto.getLogin(), dto.getPassword(), UserRole.USER);
+		User user = new User(null, dto.getLogin(), dto.getPassword(), UserRole.USER, null);
 		return user;
 	}
 }
