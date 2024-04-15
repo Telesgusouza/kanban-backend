@@ -5,8 +5,10 @@ import java.util.Set;
 
 import com.example.demo.dto.ColumnDTO;
 import com.example.demo.dto.ResponseColumnDTO;
+import com.example.demo.dto.TasksColumnDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Column;
+import com.example.demo.entity.Tasks;
 
 public class ColumnsMapper {
 
@@ -15,7 +17,14 @@ public class ColumnsMapper {
 		Set<ColumnDTO> list = new HashSet<>();
 
 		for (Column col : obj.getColumns()) {
-			ColumnDTO colDTO = new ColumnDTO(col.getId(), col.getCor(), col.getName());
+			Set<TasksColumnDTO> listTasks = new HashSet<>();
+
+			for (Tasks tk : col.getTasks()) {
+				TasksColumnDTO tkDTO = new TasksColumnDTO(tk.getId(), tk.getTitle());
+				listTasks.add(tkDTO);
+			}
+
+			ColumnDTO colDTO = new ColumnDTO(col.getId(), col.getCor(), col.getName(), listTasks);
 			list.add(colDTO);
 		}
 
