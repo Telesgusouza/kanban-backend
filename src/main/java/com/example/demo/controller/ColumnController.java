@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.exceptions.StandardError;
+import com.example.demo.dto.ResponseColumnDTO;
 import com.example.demo.dto.columnDTO;
+import com.example.demo.dto.Mappers.ColumnsMapper;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Column;
 import com.example.demo.service.ColumnService;
@@ -40,9 +42,9 @@ public class ColumnController {
 
 	)
 	@GetMapping("/{id}")
-	public ResponseEntity<Board> getData(@PathVariable UUID id) {
+	public ResponseEntity<ResponseColumnDTO> getData(@PathVariable UUID id) {
 		Board obj = repo.getDatasBoard(id);
-		return ResponseEntity.status(200).body(obj);
+		return ResponseEntity.status(200).body(ColumnsMapper.toColumn(obj));
 	}
 
 	@Operation(summary = "Criar coluna", description = "Recurso para criarmos uma nova coluna (id do board) ", responses = {
