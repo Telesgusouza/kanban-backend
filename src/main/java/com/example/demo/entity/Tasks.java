@@ -17,34 +17,36 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_columns")
-public class Column implements Serializable {
-	private static final long serialVersionUID = -7289945159073979566L;
+@Table(name = "tb_tasks")
+public class Tasks implements Serializable {
+	private static final long serialVersionUID = 8553564998957528858L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 
-	private String cor;
-	private String name;
+	private String title;
+
+	private String description;
+
+	@OneToMany(mappedBy = "tasks")
+	private Set<SubTasks> subtasks;
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "board_id")
-	private Board board;
+	@JoinColumn(name = "column_id")
+	private Column column;
 
-	@OneToMany(mappedBy = "column")
-	private Set<Tasks> tasks;
-
-	public Column() {
+	public Tasks() {
 	}
 
-	public Column(UUID id, String cor, String name, Board board) {
+	public Tasks(UUID id, String title, String description, Set<SubTasks> subtasks, Column column) {
 		super();
 		this.id = id;
-		this.cor = cor;
-		this.name = name;
-		this.board = board;
+		this.title = title;
+		this.description = description;
+		this.subtasks = subtasks;
+		this.column = column;
 	}
 
 	public UUID getId() {
@@ -55,41 +57,28 @@ public class Column implements Serializable {
 		this.id = id;
 	}
 
-	public String getCor() {
-		return cor;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setCor(String cor) {
-		this.cor = cor;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getName() {
-		return name;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Board getBoard() {
-		return board;
+	public Set<SubTasks> getSubtasks() {
+		return subtasks;
 	}
 
-	public void setBoard(Board board) {
-		this.board = board;
-	}
-
-	public Set<Tasks> getTasks() {
-		return tasks;
-	}
-
-	public void setTasks(Set<Tasks> tasks) {
-		this.tasks = tasks;
-	}
-
-	@Override
-	public String toString() {
-		return "Column [id=" + id + ", cor=" + cor + ", name=" + name + "]";
+	public void setSubtasks(Set<SubTasks> subtasks) {
+		this.subtasks = subtasks;
 	}
 
 	@Override
@@ -105,7 +94,7 @@ public class Column implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Column other = (Column) obj;
+		Tasks other = (Tasks) obj;
 		return Objects.equals(id, other.id);
 	}
 
