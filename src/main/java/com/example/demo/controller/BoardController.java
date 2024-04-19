@@ -55,7 +55,7 @@ public class BoardController {
 		Board newBoard = new Board(null, board.name(), user);
 		Board obj = repo.newBoard(newBoard);
 
-		return ResponseEntity.status(201).body(new ResponseCreateBoard(obj.getName()));
+		return ResponseEntity.status(201).body(new ResponseCreateBoard(obj.getId(), obj.getName()));
 	}
 
 	@Operation(summary = "Editar Board", description = "Editar o nome do Board", responses = {

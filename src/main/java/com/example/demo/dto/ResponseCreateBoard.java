@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
-public record ResponseCreateBoard(String board) {
+import java.util.UUID;
+
+public record ResponseCreateBoard(UUID id, String board) {
 
 }

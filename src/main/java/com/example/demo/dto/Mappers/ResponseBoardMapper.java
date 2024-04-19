@@ -14,7 +14,7 @@ public class ResponseBoardMapper {
 
 		Set<BoardDTO> list = listBoard(obj.getBoard());
 
-		ResponseBoardDTO newObj = new ResponseBoardDTO(list);
+		ResponseBoardDTO newObj = new ResponseBoardDTO( list);
 
 		return newObj;
 	}
