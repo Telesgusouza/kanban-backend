@@ -67,6 +67,9 @@ public class BoardController {
 		repo.resetNameBoard(board.name(), id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	
+	
 
 	@Operation(summary = "Deletar Board", description = "Recurso para deletar o board", responses = {
 			@ApiResponse(responseCode = "204", description = "Deletado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))) })
