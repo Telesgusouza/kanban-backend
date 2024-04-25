@@ -36,13 +36,13 @@ public class BoardService {
 	}
 
 	public void delete(UUID id) {
-		
 		try {
-			this.repoBoard.deleteById(id);
+
+			repoBoard.deleteById(id);
+
 		} catch (RuntimeException e) {
 			throw new RuntimeException();
 		}
-		
 	}
 
 }
