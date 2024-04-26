@@ -1,10 +1,15 @@
 package com.example.demo.controller;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.demo.controller.exceptions.StandardError;
 import com.example.demo.dto.RequestBoardDTO;
@@ -21,6 +28,8 @@ import com.example.demo.dto.ResponseCreateBoard;
 import com.example.demo.dto.Mappers.ResponseBoardMapper;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.User;
+import com.example.demo.repositories.BoardRepository;
+import com.example.demo.repositories.UserRepository;
 import com.example.demo.service.BoardService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +42,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/boards")
 public class BoardController {
-
+	
 	@Autowired
 	private BoardService repo;
 
@@ -74,6 +83,7 @@ public class BoardController {
 	@Operation(summary = "Deletar Board", description = "Recurso para deletar o board", responses = {
 			@ApiResponse(responseCode = "204", description = "Deletado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))) })
 
+	@CrossOrigin
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteBoard(@PathVariable UUID id) {
 
