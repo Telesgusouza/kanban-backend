@@ -28,9 +28,9 @@ public class ColumnsMapper {
 				for (SubTasks st : tk.getSubtasks()) {
 
 					if (st.getCheckbox()) {
-						pending += 1;
-					} else {
 						feats += 1;
+					} else {
+						pending += 1;
 					}
 
 				}
