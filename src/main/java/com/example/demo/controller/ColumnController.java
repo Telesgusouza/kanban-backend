@@ -36,7 +36,7 @@ public class ColumnController {
 	private ColumnService repo;
 
 	@Operation(summary = "Recuperar dados", description = "Recurso feito para recuperar dados da coluna (id do board)", responses = {
-			@ApiResponse(responseCode = "200", description = "Dados recuperados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Board.class))),
+			@ApiResponse(responseCode = "200", description = "Dados recuperados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseColumnDTO.class))),
 
 	}
 

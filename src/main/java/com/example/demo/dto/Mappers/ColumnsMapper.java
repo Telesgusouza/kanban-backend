@@ -8,6 +8,7 @@ import com.example.demo.dto.ResponseColumnDTO;
 import com.example.demo.dto.TasksColumnDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Column;
+import com.example.demo.entity.SubTasks;
 import com.example.demo.entity.Tasks;
 
 public class ColumnsMapper {
@@ -16,12 +17,27 @@ public class ColumnsMapper {
 
 		Set<ColumnDTO> list = new HashSet<>();
 
+		Integer pending = 0;
+		Integer feats = 0;
+
 		for (Column col : obj.getColumns()) {
 			Set<TasksColumnDTO> listTasks = new HashSet<>();
 
 			for (Tasks tk : col.getTasks()) {
-				TasksColumnDTO tkDTO = new TasksColumnDTO(tk.getId(), tk.getTitle());
+
+				for (SubTasks st : tk.getSubtasks()) {
+
+					if (st.getCheckbox()) {
+						pending += 1;
+					} else {
+						feats += 1;
+					}
+
+				}
+
+				TasksColumnDTO tkDTO = new TasksColumnDTO(tk.getId(), tk.getTitle(), pending, feats);
 				listTasks.add(tkDTO);
+
 			}
 
 			ColumnDTO colDTO = new ColumnDTO(col.getId(), col.getCor(), col.getName(), listTasks);
