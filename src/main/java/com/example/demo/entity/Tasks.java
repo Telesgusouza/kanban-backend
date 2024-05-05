@@ -81,6 +81,14 @@ public class Tasks implements Serializable {
 		this.subtasks = subtasks;
 	}
 
+	public Column getColumn() {
+		return column;
+	}
+
+	public void setColumn(Column column) {
+		this.column = column;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

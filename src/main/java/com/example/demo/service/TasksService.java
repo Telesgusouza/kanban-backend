@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.RequestChangeColumnTaskDTO;
 import com.example.demo.dto.SubTasksDTO;
 import com.example.demo.dto.TasksDTO;
 import com.example.demo.dto.checkboxToggleDTO;
@@ -68,6 +69,19 @@ public class TasksService {
 		}
 	}
 
+	public void changeColumnTask(RequestChangeColumnTaskDTO obj) {
+
+		if (obj.idColumn().toString().length() < 1 && obj.idTask().toString().length() < 1) { // invalidFieldException
+			throw new InvalidFieldException("Invalid field");
+		}
+
+		Tasks task = getTask(obj.idTask());
+		Optional<Column> col = repoColumn.findById(obj.idColumn());
+
+		task.setColumn(col.orElseThrow());
+		repo.save(task);
+	}
+
 	public void deleteSubTask(UUID id) {
 		try {
 
@@ -79,11 +93,11 @@ public class TasksService {
 	}
 
 	public SubTasks updateSubTasks(SubTasksDTO data, UUID id) {
-		
+
 		if (data.title().length() < 1) {
 			throw new InvalidFieldException("Invalid field");
 		}
-		
+
 		Optional<Tasks> task = repo.findById(id);
 		SubTasks obj = new SubTasks(null, false, data.title(), task.orElseThrow());
 		return repoSubTasks.save(obj);
@@ -94,7 +108,7 @@ public class TasksService {
 		if (data.checkbox() == null) {
 			throw new InvalidFieldException("Invalid field");
 		}
-		
+
 		Optional<SubTasks> obj = repoSubTasks.findById(id);
 		obj.orElseThrow().setCheckbox(data.checkbox());
 		repoSubTasks.save(obj.orElseThrow());

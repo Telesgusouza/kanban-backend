@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.exceptions.StandardError;
+import com.example.demo.dto.RequestChangeColumnTaskDTO;
 import com.example.demo.dto.SubTasksDTO;
 import com.example.demo.dto.TasksDTO;
 import com.example.demo.dto.checkboxToggleDTO;
@@ -72,6 +73,20 @@ public class TasksController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteTasks(@PathVariable UUID id) {
 		repo.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	// subTasks
+	@Operation(summary = "Mudar Task de coluna", description = "Ele muda uma task de coluna", responses = {
+
+			@ApiResponse(responseCode = "200", description = "Task movida com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
+
+			@ApiResponse(responseCode = "422", description = "Campos invalidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
+
+	})
+	@PostMapping
+	public ResponseEntity<Void> changeColumnTask(@RequestBody RequestChangeColumnTaskDTO obj) {
+		repo.changeColumnTask(obj);
 		return ResponseEntity.noContent().build();
 	}
 
