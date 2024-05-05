@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.exceptions.StandardError;
+import com.example.demo.dto.ResponseTasks;
 import com.example.demo.dto.SubTasksDTO;
 import com.example.demo.dto.TasksDTO;
 import com.example.demo.dto.checkboxToggleDTO;
+import com.example.demo.dto.Mappers.TasksMapper;
 import com.example.demo.entity.SubTasks;
 import com.example.demo.entity.Tasks;
 import com.example.demo.service.TasksService;
@@ -38,11 +40,11 @@ public class TasksController {
 
 	@Operation(summary = "Buscar Task", description = "Busque por uma task especifica", responses = {
 
-			@ApiResponse(responseCode = "200", description = "Task recuperada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Tasks.class))) })
+			@ApiResponse(responseCode = "200", description = "Task recuperada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseTasks.class))) })
 	@GetMapping("/{id}")
-	public ResponseEntity<Tasks> getTask(@PathVariable UUID id) {
+	public ResponseEntity<ResponseTasks> getTask(@PathVariable UUID id) {
 		Tasks task = repo.getTask(id);
-		return ResponseEntity.status(200).body(task);
+		return ResponseEntity.status(200).body(TasksMapper.toTasks(task));
 	}
 
 	@Operation(summary = "Nova Task", description = "Crie uma nova Task", responses = {
