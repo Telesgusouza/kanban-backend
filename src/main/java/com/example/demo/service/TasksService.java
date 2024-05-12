@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.RequestChangeColumnTaskDTO;
+import com.example.demo.dto.RequestTaskEdit;
 import com.example.demo.dto.SubTasksDTO;
 import com.example.demo.dto.TasksDTO;
 import com.example.demo.dto.checkboxToggleDTO;
@@ -20,6 +21,30 @@ import com.example.demo.repositories.TasksSubTasksRepository;
 
 @Service
 public class TasksService {
+
+	/*
+	 * 
+	 * 
+	 * http://localhost:8080
+	 * 
+	 * 
+	 * token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+	 * eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6ImRqYW5nb0BnbWFpbC5jb20iLCJleHAiOjE3MjMzMTk2Mjh9
+	 * .EarPAWJ7gw0DFTxjhQEbQhKOe_GPDPKV085x7ataLJU
+	 * 
+	 * 
+	 * border 288ebd79-a0d0-4e09-933d-59266bbccc50
+	 * 
+	 * 
+	 * column 5e053fa0-ca46-418a-aa66-0d6837e06cc9
+	 * 
+	 * 
+	 * task c9929a4d-a730-46c9-be6a-f871ddc1aa7c
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 
 	@Autowired
 	private TasksRepository repo;
@@ -46,15 +71,14 @@ public class TasksService {
 		return repo.save(obj);
 	}
 
-	public Tasks editTasks(UUID id, TasksDTO data) {
+	public Tasks editTasks(UUID id, RequestTaskEdit data) {
 
 		Optional<Tasks> oldTasks = repo.findById(id);
 
-		oldTasks.orElseThrow().setTitle(data.getTitle() == null ? oldTasks.orElseThrow().getTitle() : data.getTitle());
+		oldTasks.orElseThrow().setTitle(data.title() == null ? oldTasks.orElseThrow().getTitle() : data.title());
+
 		oldTasks.orElseThrow().setDescription(
-				data.getDescription() == null ? oldTasks.orElseThrow().getDescription() : data.getDescription());
-		oldTasks.orElseThrow()
-				.setSubtasks(data.getSubTasks() == null ? oldTasks.orElseThrow().getSubtasks() : data.getSubTasks());
+				data.description() == null ? oldTasks.orElseThrow().getDescription() : data.description());
 
 		return repo.save(oldTasks.orElseThrow());
 	}

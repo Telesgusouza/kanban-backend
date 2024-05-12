@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.exceptions.StandardError;
 import com.example.demo.dto.RequestChangeColumnTaskDTO;
+import com.example.demo.dto.RequestTaskEdit;
 import com.example.demo.dto.SubTasksDTO;
 import com.example.demo.dto.TasksDTO;
 import com.example.demo.dto.checkboxToggleDTO;
@@ -60,11 +61,13 @@ public class TasksController {
 
 	@Operation(summary = "Editar Task", description = "Edite uma task", responses = {
 
-			@ApiResponse(responseCode = "201", description = "Task editada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Tasks.class))) })
+			@ApiResponse(responseCode = "201", description = "Task editada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RequestTaskEdit.class))) })
 	@PutMapping("/{id}")
-	public ResponseEntity<Tasks> editTasks(@PathVariable UUID id, @RequestBody TasksDTO data) {
+	public ResponseEntity<RequestTaskEdit> editTasks(@PathVariable UUID id, @RequestBody RequestTaskEdit data) {
 		Tasks obj = repo.editTasks(id, data);
-		return ResponseEntity.status(201).body(obj);
+		RequestTaskEdit objEdit = new RequestTaskEdit(obj.getId(), obj.getTitle(), obj.getDescription());
+		
+		return ResponseEntity.status(201).body(objEdit);
 	}
 
 	@Operation(summary = "Deletar Task", description = "Delete uma task", responses = {
