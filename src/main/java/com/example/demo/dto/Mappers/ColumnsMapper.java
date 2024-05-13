@@ -17,13 +17,13 @@ public class ColumnsMapper {
 
 		Set<ColumnDTO> list = new HashSet<>();
 
-		Integer pending = 0;
-		Integer feats = 0;
-
 		for (Column col : obj.getColumns()) {
 			Set<TasksColumnDTO> listTasks = new HashSet<>();
 
 			for (Tasks tk : col.getTasks()) {
+
+				Integer pending = 0;
+				Integer feats = 0;
 
 				for (SubTasks st : tk.getSubtasks()) {
 

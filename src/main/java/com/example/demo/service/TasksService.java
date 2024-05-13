@@ -22,30 +22,6 @@ import com.example.demo.repositories.TasksSubTasksRepository;
 @Service
 public class TasksService {
 
-	/*
-	 * 
-	 * 
-	 * http://localhost:8080
-	 * 
-	 * 
-	 * token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
-	 * eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6ImRqYW5nb0BnbWFpbC5jb20iLCJleHAiOjE3MjMzMTk2Mjh9
-	 * .EarPAWJ7gw0DFTxjhQEbQhKOe_GPDPKV085x7ataLJU
-	 * 
-	 * 
-	 * border 288ebd79-a0d0-4e09-933d-59266bbccc50
-	 * 
-	 * 
-	 * column 5e053fa0-ca46-418a-aa66-0d6837e06cc9
-	 * 
-	 * 
-	 * task c9929a4d-a730-46c9-be6a-f871ddc1aa7c
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-
 	@Autowired
 	private TasksRepository repo;
 
